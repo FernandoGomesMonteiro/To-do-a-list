@@ -11,17 +11,17 @@
         <div class="p-4 text-xl font-bold">Dashboard</div>
         <ul class="flex-grow">
             <li class="p-4 hover:bg-gray-700"><a href="#">Home</a></li>
-            <li class="p-4 hover:bg-gray-700"><a href="#">Profile</a></li>
-            <li class="p-4 hover:bg-gray-700"><a href="#">Settings</a></li>
+            <li class="p-4 hover:bg-gray-700"><a href="#">Perfil</a></li>
+            <li class="p-4 hover:bg-gray-700"><a href="#">configuração</a></li>
         </ul>
         <div class="p-4">
-            <a href="{{ url_for('logout') }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Logout</a>
+            <a href="{{ url_for('logout') }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Sair</a>
         </div>
     </div>
     <div class="flex-grow p-6 bg-gray-100">
-        <h1 class="text-2xl font-bold mb-4">Welcome, {{ username }}!</h1>
+        <h1 class="text-2xl font-bold mb-4">Seja bem vindo, {{ username }}!</h1>
         <div class="bg-white p-6 rounded shadow-md">
-            <p>Placeholder for main content...</p>
+            <p>O que criaremos hoje ?</p>
         </div>
     </div>
 </body>
