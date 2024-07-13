@@ -14,6 +14,8 @@ def log_db():
     ''')
     conn.commit()
     conn.close()
+    
+    
 
 if __name__ == '__main__':
     log_db()

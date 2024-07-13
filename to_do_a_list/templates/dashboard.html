@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Gerenciamento de Tarefas</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="flex">
@@ -14,6 +14,7 @@
             <li class="p-4 hover:bg-gray-700"><a href="#">Perfil</a></li>
             <li class="p-4 hover:bg-gray-700"><a href="#">configuração</a></li>
         </ul>
+        
         <div class="p-4">
             <a href="{{ url_for('logout') }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Sair</a>
         </div>
@@ -22,7 +23,74 @@
         <h1 class="text-2xl font-bold mb-4">Seja bem vindo, {{ username }}!</h1>
         <div class="bg-white p-6 rounded shadow-md">
             <p>O que criaremos hoje ?</p>
-        </div>
+        </div>s
+            <div class="container mx-auto p-4">
+                <h1 class="text-3xl font-bold mb-4">Gerenciamento de Tarefas</h1>
+                <div class="bg-white p-4 rounded shadow">
+                    <h2 class="text-2xl font-bold mb-4">Adicionar Nova Tarefa</h2>
+                    <form action="/add" method="post" class="mb-4">
+                        <div class="mb-4">
+                            <label for="title" class="block text-sm font-medium text-gray-700">Título</label>
+                            <input type="text" id="title" name="title" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                        </div>
+                        <div class="mb-4">
+                            <label for="description" class="block text-sm font-medium text-gray-700">Descrição</label>
+                            <textarea id="description" name="description" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label for="due_date" class="block text-sm font-medium text-gray-700">Data de Vencimento</label>
+                            <input type="date" id="due_date" name="due_date" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                        </div>
+                        <div class="mb-4">
+                            <label for="priority" class="block text-sm font-medium text-gray-700">Prioridade</label>
+                            <select id="priority" name="priority" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                                <option value="Baixa">Baixa</option>
+                                <option value="Média">Média</option>
+                                <option value="Alta">Alta</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Adicionar Tarefa</button>
+                    </form>
+                </div>
+                <div class="mt-8">
+                    <h2 class="text-2xl font-bold mb-4">Tarefas Pendentes</h2>
+                    <div class="bg-white p-4 rounded shadow">
+                        {% for task in tasks %}
+                            <div class="flex justify-between items-center mb-4">
+                                <div>
+                                    <h3 class="text-lg font-bold">{{ task.title }}</h3>
+                                    <p>{{ task.description }}</p>
+                                    <p>Vencimento: {{ task.due_date }}</p>
+                                    <p>Prioridade: {{ task.priority }}</p>
+                                </div>
+                                <div>
+                                    <a href="/complete/{{ task.id }}" class="text-green-500 hover:text-green-700 mr-2">Concluir</a>
+                                    <a href="/edit/{{ task.id }}" class="text-blue-500 hover:text-blue-700 mr-2">Editar</a>
+                                    <a href="/delete/{{ task.id }}" class="text-red-500 hover:text-red-700">Remover</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="mt-8">
+                    <h2 class="text-2xl font-bold mb-4">Tarefas Concluídas</h2>
+                    <div class="bg-white p-4 rounded shadow">
+                        {% for task in completed_tasks %}
+                            <div class="flex justify-between items-center mb-4">
+                                <div>
+                                    <h3 class="text-lg font-bold">{{ task.title }}</h3>
+                                    <p>{{ task.description }}</p>
+                                    <p>Vencimento: {{ task.due_date }}</p>
+                                    <p>Prioridade: {{ task.priority }}</p>
+                                </div>
+                                <div>
+                                    <span class="text-green-500 font-bold">Concluída</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
     </div>
 </body>
 </html>
