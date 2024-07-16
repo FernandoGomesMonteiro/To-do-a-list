@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 import sqlite3
 
-app = Flask(__name__)
+app = Flask(__name__)    
 app.secret_key = 'jack'
 
 def validate_login(username, password):
@@ -48,20 +48,26 @@ def login():
         return redirect(url_for('dashboard'))
     else:
         flash('Senha errada')
-        return redirect(url_for('index'))
+        return redirect(url_for('index'))   
 
 @app.route('/dashboard')
 def dashboard():
     if 'username' in session:
-        username = session['username']
+        return render_template('dashboard.html', username=session['username'])
+    else:
+        return redirect(url_for('index'))
+
+@app.route('/dashboard_data')
+def dashboard_data():
+    if 'username' in session:
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
         tasks = cursor.execute('SELECT * FROM tasks WHERE completed = 0').fetchall()
         completed_tasks = cursor.execute('SELECT * FROM tasks WHERE completed = 1').fetchall()
         conn.close()
-        return render_template('dashboard.html', username=username, tasks=tasks, completed_tasks=completed_tasks)
+        return jsonify({'tasks': tasks, 'completed_tasks': completed_tasks})
     else:
-        return redirect(url_for('index'))
+        return jsonify({'error': 'Unauthorized'}), 401
 
 @app.route('/logout')
 def logout():
@@ -85,20 +91,23 @@ def adicionarinfo():
 @app.route('/editarinfo/<int:id>', methods=['GET', 'POST'])
 def editinfo(id):
     conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
+    conn.row_factory = sqlite3.Row
     if request.method == 'POST':
         title = request.form['title']
         description = request.form['description']
         due_date = request.form['due_date']
         priority = request.form['priority']
+        cursor = conn.cursor()
         cursor.execute('UPDATE tasks SET title = ?, description = ?, due_date = ?, priority = ? WHERE id = ?',
                        (title, description, due_date, priority, id))
         conn.commit()
         conn.close()
         return redirect(url_for('dashboard'))
-    task = cursor.execute('SELECT * FROM tasks WHERE id = ?', (id,)).fetchone()
-    conn.close()
-    return render_template('editinfo.html', task=task)
+    else:
+        cursor = conn.cursor()
+        task = cursor.execute('SELECT * FROM tasks WHERE id = ?', (id,)).fetchone()
+        conn.close()
+        return render_template('editinfo.html', task=task)
 
 @app.route('/completar/<int:id>')
 def complete(id):

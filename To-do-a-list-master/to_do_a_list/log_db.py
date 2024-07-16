@@ -6,25 +6,25 @@ def setup_database():
 
     # Criação da tabela de usuários
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL,
-        password TEXT NOT NULL,
-        email TEXT,
-        idade INTEGER
-    )
+    CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL,
+    email TEXT,
+    idade INTEGER
+    );
     ''')
 
     # Criação da tabela de tarefas
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS tasks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        description TEXT,
-        due_date TEXT,
-        priority TEXT,
-        completed INTEGER DEFAULT 0
-    )
+    CREATE TABLE tasks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    description TEXT,
+    due_date DATE,
+    priority TEXT,
+    completed INTEGER NOT NULL DEFAULT 0
+    );
     ''')
 
     conn.commit()

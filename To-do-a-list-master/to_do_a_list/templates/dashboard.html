@@ -58,22 +58,52 @@
 
             <div class="bg-white p-4 mt-6 rounded shadow">
                 <h2 class="text-2xl font-bold mb-4">Tarefas Pendentes</h2>
-                <ul class="list-disc list-inside">
-                    {% for task in tasks %}
-                    <li class="mb-2">{{ task['title'] }} - {{ task['description'] }} - {{ task['due_date'] }} - {{ task['priority'] }}</li>
-                    {% endfor %}
+                <ul id="pending-tasks" class="list-disc list-inside">
+                    <!-- Tarefas pendentes serão inseridas aqui -->
                 </ul>
             </div>
-            
+
             <div class="bg-white p-4 mt-6 rounded shadow">
                 <h2 class="text-2xl font-bold mb-4">Tarefas Completas</h2>
-                <ul class="list-disc list-inside">
-                    {% for task in completed_tasks %}
-                    <li class="mb-2">{{ task['title'] }} - {{ task['description'] }} - {{ task['due_date'] }} - {{ task['priority'] }}</li>
-                    {% endfor %}
+                <ul id="completed-tasks" class="list-disc list-inside">
+                    <!-- Tarefas completas serão inseridas aqui -->
                 </ul>
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/dashboard_data')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // Verifique os dados recebidos no console
+    
+                    const pendingTasks = data.tasks;
+                    const completedTasks = data.completed_tasks;
+    
+                    const pendingTasksContainer = document.getElementById('pending-tasks');
+                    const completedTasksContainer = document.getElementById('completed-tasks');
+    
+                    pendingTasksContainer.innerHTML = '';
+                    completedTasksContainer.innerHTML = '';
+    
+                    pendingTasks.forEach(task => {
+                        const taskElement = document.createElement('li');
+                        taskElement.className = 'mb-2';
+                        taskElement.textContent = `${task[1]} - ${task[2]} - ${task[3]} - ${task[4]}`;
+                        pendingTasksContainer.appendChild(taskElement);
+                    });
+    
+                    completedTasks.forEach(task => {
+                        const taskElement = document.createElement('li');
+                        taskElement.className = 'mb-2';
+                        taskElement.textContent = `${task[1]} - ${task[2]} - ${task[3]} - ${task[4]}`;
+                        completedTasksContainer.appendChild(taskElement);
+                    });
+                })
+                .catch(error => console.error('Erro ao buscar dados:', error));
+        });
+    </script>
+    </script>
 </body>
 </html>
